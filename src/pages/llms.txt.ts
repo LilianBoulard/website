@@ -22,7 +22,7 @@ export const GET: APIRoute = async () => {
     '',
     `- [Home](${SITE_URL}/) — profile / about`,
     `- [Full plain-text mirror of all posts](${SITE_URL}/llms-full.txt)`,
-    `- [RSS](${SITE_URL}/rss.xml)`,
+    `- [RSS](${SITE_URL}/blog/rss.xml)`,
     `- [Sitemap](${SITE_URL}/sitemap-index.xml)`,
     '',
     '## Blog posts',

@@ -15,7 +15,6 @@ export const AUTHOR = {
 export const SOCIAL_LINKS = [
   { label: 'GitHub', href: `https://github.com/${AUTHOR.github}` },
   { label: 'LinkedIn', href: `https://www.linkedin.com/in/${AUTHOR.linkedin}/` },
-  { label: 'RSS', href: '/rss.xml' },
 ] as const;
 
 export const GITHUB_README = {

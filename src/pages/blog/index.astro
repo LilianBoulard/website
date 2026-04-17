@@ -20,7 +20,10 @@ const allTags = Array.from(
     <header class="page-header">
       <p class="kicker">Blog</p>
       <h1>Writing</h1>
-      <p class="lede">Notes on software, systems, and the things in between.</p>
+      <p class="lede">
+        Notes on software, systems, and the things in between.
+        Subscribe via <a href="/blog/rss.xml">RSS</a>.
+      </p>
       {allTags.length > 0 && (
         <ul class="tag-cloud">
           {allTags.map((t) => (
