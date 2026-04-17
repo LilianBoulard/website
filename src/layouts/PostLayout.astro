@@ -56,6 +56,11 @@ const readingMinutes = wordCount ? Math.max(1, Math.round(wordCount / 220)) : un
       )}
     </header>
 
+    <aside class="ai-free" aria-label="Authorship notice">
+      <span class="ai-free-label">Human-written</span>
+      <p>This article was written by a human, without the use of generative AI.</p>
+    </aside>
+
     <div class="prose post-body">
       <slot />
     </div>
@@ -115,4 +120,30 @@ const readingMinutes = wordCount ? Math.max(1, Math.round(wordCount / 220)) : un
     text-decoration: none;
   }
   .tags a:hover { color: var(--color-accent); }
+
+  .ai-free {
+    margin: 0 0 2.5rem;
+    padding: 0.85rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 4px;
+    background: var(--color-bg-elev);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.75rem;
+  }
+  .ai-free-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+  }
+  .ai-free p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+    line-height: 1.5;
+  }
 </style>
