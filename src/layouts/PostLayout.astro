@@ -50,7 +50,7 @@ const readingMinutes = wordCount ? Math.max(1, Math.round(wordCount / 220)) : un
       {tags.length > 0 && (
         <ul class="tags">
           {tags.map((t) => (
-            <li><a href={`/tags/${t}/`}>#{t}</a></li>
+            <li><a href={`/blog/tags/${t}/`}>#{t}</a></li>
           ))}
         </ul>
       )}

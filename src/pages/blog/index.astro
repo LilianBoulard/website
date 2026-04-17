@@ -27,7 +27,7 @@ const allTags = Array.from(
       {allTags.length > 0 && (
         <ul class="tag-cloud">
           {allTags.map((t) => (
-            <li><a href={`/tags/${t}/`}>#{t}</a></li>
+            <li><a href={`/blog/tags/${t}/`}>#{t}</a></li>
           ))}
         </ul>
       )}
@@ -75,6 +75,16 @@ const allTags = Array.from(
     color: var(--color-fg-muted);
     font-size: 1.1rem;
     margin: 0 0 1rem;
+  }
+  .lede a {
+    color: var(--color-link);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-link) 35%, transparent);
+    transition: border-color 200ms ease, color 200ms ease;
+  }
+  .lede a:hover {
+    color: var(--color-link-hover);
+    border-bottom-color: var(--color-link-hover);
   }
   .tag-cloud {
     list-style: none;

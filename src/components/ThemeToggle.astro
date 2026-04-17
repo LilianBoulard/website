@@ -36,11 +36,13 @@
     background-color: var(--color-bg-elev);
     border-color: var(--color-border);
   }
-  /* Show the sun in dark mode (click → switch to light) and the moon in light mode. */
+  /* Show the sun in dark mode (click → switch to light) and the moon in light mode.
+   * `data-theme` lives on <html>, which has no astro-cid attribute, so the override
+   * selectors must be wrapped in :global() to escape Astro's component scoping. */
   .icon-sun { display: none; }
   .icon-moon { display: block; }
-  [data-theme='dark'] .icon-sun { display: block; }
-  [data-theme='dark'] .icon-moon { display: none; }
+  :global([data-theme='dark']) .icon-sun { display: block; }
+  :global([data-theme='dark']) .icon-moon { display: none; }
 </style>
 
 <script>

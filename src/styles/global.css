@@ -205,6 +205,14 @@ body {
   border-radius: 0.5rem;
 }
 
+/* Tailwind preflight sets `img { display: block }`. Restore inline flow for
+ * images inside paragraphs so README badge rows (multiple <img> in one <p>)
+ * don't stack one per line. */
+.prose p img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .prose hr {
   border: 0;
   height: 1px;
