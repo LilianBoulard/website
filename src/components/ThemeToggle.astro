@@ -44,7 +44,9 @@
 </style>
 
 <script>
-  const btn = document.currentScript?.previousElementSibling as HTMLButtonElement | null;
+  // Astro bundles unattributed <script> as a deferred ES module emitted in <head>,
+  // so document.currentScript is null and the button must be located by selector.
+  const btn = document.querySelector<HTMLButtonElement>('.theme-toggle');
   function setTheme(theme: 'dark' | 'light') {
     document.documentElement.setAttribute('data-theme', theme);
     try { localStorage.setItem('theme', theme); } catch {}

@@ -16,6 +16,39 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     <div class="prose readme" set:html={readmeHtml} />
   </section>
 
+  <script>
+    import { processReadmeMarkdown, README_RAW_URL } from '../lib/github-readme.ts';
+
+    const TTL_MS = 5 * 60 * 1000;
+    const CACHE_KEY = 'readme-html-v1';
+    const CACHE_AT = 'readme-html-v1-at';
+
+    async function refreshReadme() {
+      const container = document.querySelector<HTMLDivElement>('.readme');
+      if (!container) return;
+      try {
+        const cached = sessionStorage.getItem(CACHE_KEY);
+        const cachedAt = Number(sessionStorage.getItem(CACHE_AT) ?? 0);
+        let html: string;
+        if (cached && Date.now() - cachedAt < TTL_MS) {
+          html = cached;
+        } else {
+          const res = await fetch(README_RAW_URL, { cache: 'no-store' });
+          if (!res.ok) throw new Error(`raw README HTTP ${res.status}`);
+          const md = await res.text();
+          html = await processReadmeMarkdown(md);
+          sessionStorage.setItem(CACHE_KEY, html);
+          sessionStorage.setItem(CACHE_AT, String(Date.now()));
+        }
+        container.innerHTML = html;
+      } catch (err) {
+        console.warn('[readme] runtime refresh failed, keeping build-time copy:', err);
+      }
+    }
+
+    refreshReadme();
+  </script>
+
   <section class="recent" aria-labelledby="recent-heading">
     <header class="recent-header">
       <h2 id="recent-heading">Recent writing</h2>

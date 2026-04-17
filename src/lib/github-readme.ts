@@ -13,6 +13,8 @@ import { GITHUB_README } from '../consts.ts';
 const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_README.owner}/${GITHUB_README.repo}/${GITHUB_README.branch}`;
 const BLOB_BASE = `https://github.com/${GITHUB_README.owner}/${GITHUB_README.repo}/blob/${GITHUB_README.branch}`;
 
+export const README_RAW_URL = `${RAW_BASE}/README.md`;
+
 const sanitizeSchema = {
   ...defaultSchema,
   attributes: {
@@ -62,25 +64,7 @@ const FALLBACK_HTML =
   '<p><em>The GitHub profile README is temporarily unavailable. ' +
   `View it directly at <a href="https://github.com/${GITHUB_README.owner}/${GITHUB_README.repo}">github.com/${GITHUB_README.owner}</a>.</em></p>`;
 
-let cache: { html: string; fetchedAt: string } | null = null;
-
-export async function loadProfileReadme(): Promise<{ html: string; fetchedAt: string }> {
-  if (cache) return cache;
-
-  const url = `${RAW_BASE}/README.md`;
-  let markdown: string;
-  try {
-    const res = await fetch(url, {
-      headers: { 'User-Agent': 'lilian.boulard.fr-build' },
-    });
-    if (!res.ok) throw new Error(`GitHub responded ${res.status}`);
-    markdown = await res.text();
-  } catch (err) {
-    console.error(`[github-readme] failed to fetch ${url}:`, err);
-    cache = { html: FALLBACK_HTML, fetchedAt: new Date().toISOString() };
-    return cache;
-  }
-
+export async function processReadmeMarkdown(markdown: string): Promise<string> {
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
@@ -90,7 +74,28 @@ export async function loadProfileReadme(): Promise<{ html: string; fetchedAt: st
     .use(rehypeSanitize, sanitizeSchema)
     .use(rehypeStringify)
     .process(markdown);
+  return String(file);
+}
 
-  cache = { html: String(file), fetchedAt: new Date().toISOString() };
+let cache: { html: string; fetchedAt: string } | null = null;
+
+export async function loadProfileReadme(): Promise<{ html: string; fetchedAt: string }> {
+  if (cache) return cache;
+
+  let markdown: string;
+  try {
+    const res = await fetch(README_RAW_URL, {
+      headers: { 'User-Agent': 'lilian.boulard.fr-build' },
+    });
+    if (!res.ok) throw new Error(`GitHub responded ${res.status}`);
+    markdown = await res.text();
+  } catch (err) {
+    console.error(`[github-readme] failed to fetch ${README_RAW_URL}:`, err);
+    cache = { html: FALLBACK_HTML, fetchedAt: new Date().toISOString() };
+    return cache;
+  }
+
+  const html = await processReadmeMarkdown(markdown);
+  cache = { html, fetchedAt: new Date().toISOString() };
   return cache;
 }
