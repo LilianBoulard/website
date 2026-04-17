@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const tags = Array.from(new Set(posts.flatMap((p) => p.data.tags)));
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((p) => p.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout
+  title={`#${tag}`}
+  description={`Posts tagged ${tag}.`}
+>
+  <section class="tag">
+    <header class="page-header">
+      <p class="kicker">Tag</p>
+      <h1>#{tag}</h1>
+      <p class="lede">{posts.length} post{posts.length === 1 ? '' : 's'}.</p>
+    </header>
+
+    <ul class="post-list">
+      {posts.map((post) => (
+        <li><PostCard post={post} /></li>
+      ))}
+    </ul>
+
+    <p class="back"><a href="/blog/">← All posts</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .tag { max-width: 72ch; margin: 3rem auto 2rem; padding: 0 1.25rem; }
+  .page-header { margin-bottom: 2rem; }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 2.4rem;
+    line-height: 1.1;
+    margin: 0 0 0.5rem;
+    font-variation-settings: 'opsz' 144;
+  }
+  .lede { color: var(--color-fg-muted); margin: 0; }
+  .post-list { list-style: none; padding: 0; margin: 0; }
+  .back { margin-top: 2rem; }
+  .back a {
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-fg-muted) 35%, transparent);
+  }
+  .back a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+</style>

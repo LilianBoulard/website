@@ -1,0 +1,88 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const { title, description, date, tags } = post.data;
+const dateStr = date.toISOString().slice(0, 10);
+const dateLabel = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<article class="post-card">
+  <a href={`/blog/${post.id}/`} class="card-link">
+    <header>
+      <time datetime={dateStr}>{dateLabel}</time>
+      <h2>{title}</h2>
+    </header>
+    <p>{description}</p>
+    {tags.length > 0 && (
+      <ul class="tags">
+        {tags.map((t) => (
+          <li>#{t}</li>
+        ))}
+      </ul>
+    )}
+  </a>
+</article>
+
+<style>
+  .post-card {
+    border-bottom: 1px solid var(--color-border);
+    padding: 1.75rem 0;
+  }
+  .post-card:first-child { padding-top: 0; }
+  .post-card:last-child  { border-bottom: 0; }
+  .card-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+  .card-link header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+  }
+  .card-link time {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .card-link h2 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: var(--color-fg);
+    margin: 0;
+    font-variation-settings: 'opsz' 72;
+    transition: color 150ms ease;
+  }
+  .card-link:hover h2 { color: var(--color-accent); }
+  .card-link p {
+    margin: 0;
+    color: var(--color-fg-muted);
+    line-height: 1.55;
+  }
+  .tags {
+    list-style: none;
+    padding: 0;
+    margin: 0.6rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .tags li {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-fg-subtle);
+  }
+</style>

@@ -1,0 +1,33 @@
+---
+title: Hello, world
+description: A first post
+date: 2026-04-17
+tags: [meta]
+---
+
+This is the first post on the new blog. It exists mostly so the listing page has
+something to render and so I can sanity-check the typography, the comment box at
+the bottom, and the dark/light theme switch in the header.
+
+## What's on this site
+
+Two things, mostly:
+
+- The home page renders my [GitHub profile README](https://github.com/LilianBoulard/LilianBoulard) — a single source of truth I update from elsewhere.
+- This blog, where I'll occasionally write about software, infra, and adjacent things.
+
+If you want to subscribe, there's an [RSS feed](/rss.xml). If you want to talk
+back, the comment box below is wired up to GitHub via [utteranc.es](https://utteranc.es) —
+sign in with GitHub and your reply lands as a comment on an issue in this repo.
+
+## A bit of code
+
+```ts
+// just to confirm syntax highlighting works
+type Post = { title: string; date: Date };
+
+const sortByDate = (posts: Post[]) =>
+  [...posts].sort((a, b) => b.date.getTime() - a.date.getTime());
+```
+
+That's it for now. More to come.

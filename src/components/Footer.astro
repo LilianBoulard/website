@@ -1,0 +1,35 @@
+---
+import SocialLinks from './SocialLinks.astro';
+import { AUTHOR } from '../consts.ts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="inner">
+    <SocialLinks />
+    <p class="copy">© {year} {AUTHOR.name}.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 5rem;
+    border-top: 1px solid var(--color-border);
+    padding: 2rem 0 3rem;
+    color: var(--color-fg-muted);
+    font-size: 0.9rem;
+  }
+  .inner {
+    max-width: 72ch;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .copy {
+    margin: 0;
+    color: var(--color-fg-subtle);
+  }
+</style>

@@ -1,0 +1,278 @@
+@import 'tailwindcss';
+
+@import '@fontsource-variable/inter/index.css';
+@import '@fontsource-variable/fraunces/index.css';
+@import '@fontsource-variable/fraunces/wght-italic.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
+/* ---------- Theme tokens ----------
+ * Dark is the default. The light scheme overrides via [data-theme="light"].
+ * We use HSL-ish hex so changes stay coherent across the palette.
+ */
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Fraunces Variable', 'Times New Roman', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #0f1115;
+  --color-bg-elev: #161922;
+  --color-fg: #e6e2da;
+  --color-fg-muted: #9b958a;
+  --color-fg-subtle: #6b665d;
+  --color-border: #2a2d36;
+  --color-accent: #e07a4d;
+  --color-accent-fg: #ffffff;
+  --color-link: #e8a17f;
+  --color-link-hover: #f4c5ad;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: #faf7f2;
+  --color-bg-elev: #f3eee5;
+  --color-fg: #1a1a1a;
+  --color-fg-muted: #5a5651;
+  --color-fg-subtle: #8a857d;
+  --color-border: #e3ddd1;
+  --color-accent: #c2410c;
+  --color-accent-fg: #ffffff;
+  --color-link: #b3370a;
+  --color-link-hover: #8a2a07;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  min-height: 100vh;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+/* ---------- Prose typography ----------
+ * Hand-rolled (rather than @tailwindcss/typography) so it stays small and
+ * the choices are explicit. Used by both blog posts and the rendered README.
+ */
+.prose {
+  color: var(--color-fg);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 68ch;
+}
+
+.prose > * + * {
+  margin-top: 1.25em;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--color-fg);
+  scroll-margin-top: 6rem;
+  font-variation-settings: 'opsz' 36;
+}
+
+.prose h1 {
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  line-height: 1.1;
+  margin-top: 0;
+  font-variation-settings: 'opsz' 144;
+}
+
+.prose h2 {
+  font-size: 1.65rem;
+  line-height: 1.25;
+  margin-top: 2.4em;
+  padding-bottom: 0.25em;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.prose h3 {
+  font-size: 1.275rem;
+  margin-top: 2em;
+}
+
+.prose h4 {
+  font-size: 1.1rem;
+  margin-top: 1.6em;
+}
+
+.prose p {
+  text-wrap: pretty;
+}
+
+.prose a {
+  color: var(--color-link);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--color-link) 35%, transparent);
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.prose a:hover {
+  color: var(--color-link-hover);
+  border-bottom-color: var(--color-link-hover);
+}
+
+.prose strong {
+  color: var(--color-fg);
+  font-weight: 600;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1.25em;
+  color: var(--color-fg-muted);
+  font-style: italic;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+}
+
+.prose ul {
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li::marker {
+  color: var(--color-fg-subtle);
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background-color: var(--color-bg-elev);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  font-family: var(--font-mono);
+  background-color: var(--color-bg-elev);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose img,
+.prose video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.prose hr {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-border),
+    transparent
+  );
+  margin: 2.5em 0;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+}
+
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.5em 0.75em;
+  text-align: left;
+}
+
+.prose th {
+  font-weight: 600;
+  color: var(--color-fg);
+}
+
+/* GitHub-flavored markdown gimmicks the README often uses */
+.prose img[align='right'] { float: right; margin: 0 0 1em 1em; }
+.prose img[align='left']  { float: left;  margin: 0 1em 1em 0; }
+
+/* Anchor link arrow on heading hover (added by rehype-autolink-headings or by CSS pseudo). */
+.prose h2 > a[href^='#']::before,
+.prose h3 > a[href^='#']::before,
+.prose h4 > a[href^='#']::before {
+  content: '#';
+  color: var(--color-fg-subtle);
+  margin-right: 0.4em;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.prose h2:hover > a[href^='#']::before,
+.prose h3:hover > a[href^='#']::before,
+.prose h4:hover > a[href^='#']::before {
+  opacity: 1;
+}
+
+/* Reading progress bar */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-color: var(--color-accent);
+  width: var(--progress, 0%);
+  z-index: 50;
+  transition: width 80ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

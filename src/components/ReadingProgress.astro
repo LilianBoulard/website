@@ -1,0 +1,28 @@
+---
+// Thin progress bar at the top of the viewport. Reflects how far down the article the reader has scrolled.
+---
+
+<div class="reading-progress" role="progressbar" aria-label="Reading progress" aria-hidden="true"></div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('.reading-progress');
+  if (bar) {
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / docHeight) * 100)) : 0;
+      bar.style.setProperty('--progress', pct.toFixed(2) + '%');
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!raf) raf = requestAnimationFrame(update);
+      },
+      { passive: true },
+    );
+    window.addEventListener('resize', update);
+    update();
+  }
+</script>

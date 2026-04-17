@@ -1,0 +1,53 @@
+---
+import { SOCIAL_LINKS } from '../consts.ts';
+
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<ul class:list={['social-links', className]}>
+  {SOCIAL_LINKS.map(({ label, href }) => (
+    <li>
+      <a
+        href={href}
+        rel={href.startsWith('http') ? 'me noopener' : undefined}
+        target={href.startsWith('http') ? '_blank' : undefined}
+      >
+        {label}
+        {href.startsWith('http') && (
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7M9 7h8v8" />
+          </svg>
+        )}
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  .social-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-fg-muted) 35%, transparent);
+    padding-bottom: 1px;
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+  .social-links a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+</style>

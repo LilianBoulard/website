@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import { getCollection } from 'astro:content';
+import { loadProfileReadme } from '../lib/github-readme.ts';
+
+const { html: readmeHtml } = await loadProfileReadme();
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="readme-section">
+    <div class="prose readme" set:html={readmeHtml} />
+  </section>
+
+  <section class="recent" aria-labelledby="recent-heading">
+    <header class="recent-header">
+      <h2 id="recent-heading">Recent writing</h2>
+      <a href="/blog/" class="more">All posts →</a>
+    </header>
+    {posts.length === 0 ? (
+      <p class="empty">Nothing here yet — first post coming soon.</p>
+    ) : (
+      <ul class="recent-list">
+        {posts.map((post) => {
+          const dateStr = post.data.date.toISOString().slice(0, 10);
+          const dateLabel = post.data.date.toLocaleDateString('en-US', {
+            year: 'numeric', month: 'short', day: 'numeric',
+          });
+          return (
+            <li>
+              <a href={`/blog/${post.id}/`}>
+                <time datetime={dateStr}>{dateLabel}</time>
+                <span class="t">{post.data.title}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+
+  <section class="elsewhere" aria-labelledby="elsewhere-heading">
+    <h2 id="elsewhere-heading">Elsewhere</h2>
+    <SocialLinks />
+  </section>
+</BaseLayout>
+
+<style>
+  .readme-section,
+  .recent,
+  .elsewhere {
+    max-width: 72ch;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+  }
+  .readme-section { padding-top: 3rem; }
+
+  /* Center the prose block within the wider container so the README's own width applies. */
+  .readme { margin-left: auto; margin-right: auto; }
+
+  .recent { margin-top: 4rem; }
+  .recent-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .recent-header h2,
+  .elsewhere h2 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+  .more {
+    font-size: 0.9rem;
+    color: var(--color-fg-muted);
+    text-decoration: none;
+    border-bottom: 1px solid color-mix(in oklab, var(--color-fg-muted) 35%, transparent);
+  }
+  .more:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+  .recent-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .recent-list li + li {
+    border-top: 1px solid var(--color-border);
+  }
+  .recent-list a {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.85rem 0;
+    color: inherit;
+    text-decoration: none;
+  }
+  .recent-list time {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .recent-list .t {
+    font-family: var(--font-serif);
+    font-size: 1.1rem;
+    color: var(--color-fg);
+    transition: color 150ms ease;
+  }
+  .recent-list a:hover .t { color: var(--color-accent); }
+  .empty { color: var(--color-fg-muted); }
+
+  .elsewhere { margin-top: 3.5rem; }
+  .elsewhere h2 { margin-bottom: 0.85rem; }
+
+  @media (max-width: 540px) {
+    .recent-list a {
+      grid-template-columns: 1fr;
+      gap: 0.15rem;
+    }
+  }
+</style>

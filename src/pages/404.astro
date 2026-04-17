@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Not found" description="That page doesn't exist." noindex={true}>
+  <section class="nf">
+    <p class="code">404</p>
+    <h1>Lost the trail.</h1>
+    <p class="lede">
+      That URL doesn't go anywhere on this site. Try the
+      <a href="/">home page</a> or the <a href="/blog/">blog</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf {
+    max-width: 60ch;
+    margin: 6rem auto;
+    padding: 0 1.25rem;
+    text-align: center;
+  }
+  .code {
+    font-family: var(--font-mono);
+    color: var(--color-fg-subtle);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    margin: 0 0 1rem;
+  }
+  .nf h1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    margin: 0 0 1rem;
+    font-variation-settings: 'opsz' 144;
+  }
+  .lede { color: var(--color-fg-muted); font-size: 1.05rem; }
+  .lede a {
+    color: var(--color-link);
+    border-bottom: 1px solid color-mix(in oklab, var(--color-link) 35%, transparent);
+    text-decoration: none;
+  }
+  .lede a:hover {
+    color: var(--color-link-hover);
+    border-bottom-color: var(--color-link-hover);
+  }
+</style>

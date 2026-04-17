@@ -1,0 +1,65 @@
+---
+import { UTTERANCES } from '../consts.ts';
+---
+
+<section class="comments" aria-label="Comments">
+  <h2>Comments</h2>
+  <p class="hint">
+    Comments are powered by <a href="https://utteranc.es/" rel="noopener" target="_blank">utteranc.es</a> and stored as
+    issues on <a href={`https://github.com/${UTTERANCES.repo}`} rel="noopener" target="_blank">GitHub</a>. You'll need a
+    GitHub account to comment.
+  </p>
+  <div id="utterances-mount"></div>
+</section>
+
+<script
+  is:inline
+  define:vars={{
+    repo: UTTERANCES.repo,
+    issueTerm: UTTERANCES.issueTerm,
+    label: UTTERANCES.label,
+  }}
+>
+  const initialTheme =
+    document.documentElement.getAttribute('data-theme') === 'light'
+      ? 'github-light'
+      : 'github-dark';
+
+  const script = document.createElement('script');
+  script.src = 'https://utteranc.es/client.js';
+  script.async = true;
+  script.crossOrigin = 'anonymous';
+  script.setAttribute('repo', repo);
+  script.setAttribute('issue-term', issueTerm);
+  if (label) script.setAttribute('label', label);
+  script.setAttribute('theme', initialTheme);
+  document.getElementById('utterances-mount')?.appendChild(script);
+</script>
+
+<style>
+  .comments {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .comments h2 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.4rem;
+    margin: 0 0 0.5rem;
+  }
+  .hint {
+    color: var(--color-fg-muted);
+    font-size: 0.9rem;
+    margin: 0 0 1.5rem;
+  }
+  .hint a {
+    color: var(--color-link);
+    border-bottom: 1px solid color-mix(in oklab, var(--color-link) 35%, transparent);
+    text-decoration: none;
+  }
+  .hint a:hover {
+    color: var(--color-link-hover);
+    border-bottom-color: var(--color-link-hover);
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE_TITLE } from '../../consts.ts';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const allTags = Array.from(
+  new Set(posts.flatMap((p) => p.data.tags)),
+).sort();
+---
+
+<BaseLayout
+  title="Blog"
+  description={`Writing by ${SITE_TITLE}.`}
+>
+  <section class="blog">
+    <header class="page-header">
+      <p class="kicker">Blog</p>
+      <h1>Writing</h1>
+      <p class="lede">Notes on software, systems, and the things in between.</p>
+      {allTags.length > 0 && (
+        <ul class="tag-cloud">
+          {allTags.map((t) => (
+            <li><a href={`/tags/${t}/`}>#{t}</a></li>
+          ))}
+        </ul>
+      )}
+    </header>
+
+    {posts.length === 0 ? (
+      <p class="empty">Nothing published yet.</p>
+    ) : (
+      <ul class="post-list">
+        {posts.map((post) => (
+          <li><PostCard post={post} /></li>
+        ))}
+      </ul>
+    )}
+  </section>
+</BaseLayout>
+
+<style>
+  .blog {
+    max-width: 72ch;
+    margin: 3rem auto 2rem;
+    padding: 0 1.25rem;
+  }
+  .page-header {
+    margin-bottom: 2.5rem;
+  }
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-fg-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5rem;
+  }
+  .page-header h1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(2.2rem, 1.4rem + 3vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    font-variation-settings: 'opsz' 144;
+  }
+  .lede {
+    color: var(--color-fg-muted);
+    font-size: 1.1rem;
+    margin: 0 0 1rem;
+  }
+  .tag-cloud {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.85rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+  }
+  .tag-cloud a {
+    color: var(--color-fg-subtle);
+    text-decoration: none;
+  }
+  .tag-cloud a:hover { color: var(--color-accent); }
+  .post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .empty { color: var(--color-fg-muted); }
+</style>
